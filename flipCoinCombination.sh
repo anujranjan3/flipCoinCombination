@@ -2,10 +2,14 @@
 
 declare -A coinDict;
 
-HH=0;
-HT=0;
-TH=0;
-TT=0;
+HHH=0;
+HHT=0;
+HTH=0;
+HTT=0;
+THH=0;
+THT=0;
+TTH=0;
+TTT=0;
 
 headTailGenerator () {
 local counter=0;
@@ -19,29 +23,65 @@ then
 	randomNum1=$((RANDOM%2));
 	if [ $randomNum1 -eq 1 ]
 	then
-		coinDict[$DictCounter]="$randomNum$randomNum1";
-		echo "It's HH";
-		(( counter++ ));
-		(( DictCounter ++ ));
+		randomNum2=$((RANDOM%2));
+		if [ $randomNum2 -eq 1 ]
+		then
+			coinDict[$DictCounter]="$randomNum$randomNum1$randomNum2";
+			echo "It's HHH";
+			(( counter++ ));
+			(( DictCounter ++ ));
+		else
+			coinDict[$DictCounter]="$randomNum$randomNum1$randomNum2";
+      		echo "It's HHT";
+      		(( counter++ ));
+      		(( DictCounter ++ ));
+		fi
 	else
-		coinDict[$DictCounter]="$randomNum$randomNum1";
-      echo "It's HT";
-      (( counter++ ));
-      (( DictCounter ++ ));
+		randomNum2=$((RANDOM%2));
+		if [ $randomNum2 -eq 1 ]
+		then
+			coinDict[$DictCounter]="$randomNum$randomNum1$randomNum2";
+			echo "It's HTH";
+			(( counter++ ));
+			(( DictCounter ++ ));
+		else
+			coinDict[$DictCounter]="$randomNum$randomNum1$randomNum2";
+      		echo "It's HTT";
+      		(( counter++ ));
+      		(( DictCounter ++ ));
+		fi
 	fi
 else
 	randomNum1=$((RANDOM%2));
 	if [ $randomNum1 -eq 1 ]
 	then
-		coinDict[$DictCounter]="$randomNum$randomNum1";
-      echo "It's TH";
-      (( counter++ ));
-      (( DictCounter ++ ));
+		randomNum2=$((RANDOM%2));
+		if [ $randomNum2 -eq 1 ]
+		then
+			coinDict[$DictCounter]="$randomNum$randomNum1$randomNum2";
+			echo "It's THH";
+			(( counter++ ));
+			(( DictCounter ++ ));
+		else
+			coinDict[$DictCounter]="$randomNum$randomNum1$randomNum2";
+      		echo "It's THT";
+      		(( counter++ ));
+      		(( DictCounter ++ ));
+		fi
 	else
-		coinDict[$DictCounter]="$randomNum$randomNum1";
-      echo "It's TT";
-      (( counter++ ));
-      (( DictCounter ++ ));
+		randomNum2=$((RANDOM%2));
+		if [ $randomNum2 -eq 1 ]
+		then
+			coinDict[$DictCounter]="$randomNum$randomNum1$randomNum2";
+			echo "It's TTH";
+			(( counter++ ));
+			(( DictCounter ++ ));
+		else
+			coinDict[$DictCounter]="$randomNum$randomNum1$randomNum2";
+      		echo "It's TTT";
+      		(( counter++ ));
+      		(( DictCounter ++ ));
+		fi
 	fi
 fi
 done
@@ -52,39 +92,67 @@ calculatePercantage () {
 
 	while [ $counter -lt $FlipCount ]
 	do
-		if [ ${coinDict[$counter]} == "11" ]
+		if [ ${coinDict[$counter]} == "111" ]
 		then
-			(( HH++ ));
-		elif [ ${coinDict[$counter]} == "10" ]
+			(( HHH++ ));
+		elif [ ${coinDict[$counter]} == "110" ]
 		then
-			(( HT++ ));
-		elif [ ${coinDict[$counter]} == "01" ]
+			(( HHT++ ));
+		elif [ ${coinDict[$counter]} == "101" ]
 		then
-			(( TH++ ));
-		elif [ ${coinDict[$counter]} == "00" ]
+			(( HTH++ ));
+		elif [ ${coinDict[$counter]} == "100" ]
 		then
-			(( TT++ ));
+			(( HTT++ ));
+		elif [ ${coinDict[$counter]} == "011" ]
+		then
+			(( THH++ ));
+		elif [ ${coinDict[$counter]} == "010" ]
+		then
+			(( THT++ ));
+		elif [ ${coinDict[$counter]} == "001" ]
+		then
+			(( TTH++ ));
+		elif [ ${coinDict[$counter]} == "000" ]
+		then
+			(( TTT++ ));
 		fi
 		(( counter++ ));
 	done
 
 	echo "Showing all elements dictionary : "${coinDict[@]};
 
-	echo "Calculating Percentage of HH --";
-	HHPercent=$((($HH*100)/$FlipCount));
-	echo "Percentage of HH : " $HHPercent;
+	echo "Calculating Percentage of HHH --";
+	HHHPercent=$((($HHH*100)/$FlipCount));
+	echo "Percentage of HHH : " $HHHPercent;
 
-	echo "Calculating Percentage of HT --";
-   HTPercent=$((($HT*100)/$FlipCount));
-   echo "Percentage of HT : " $HTPercent;
+	echo "Calculating Percentage of HHT --";
+    HHTPercent=$((($HHT*100)/$FlipCount));
+    echo "Percentage of HHT : " $HHTPercent;
 
-	echo "Calculating Percentage of TH --";
-   THPercent=$((($TH*100)/$FlipCount));
-   echo "Percentage of TH : " $THPercent;
+	echo "Calculating Percentage of HTH --";
+    HTHPercent=$((($HTH*100)/$FlipCount));
+    echo "Percentage of HTH : " $HTHPercent;
 
-	echo "Calculating Percentage of TT --";
-   TTPercent=$((($TT*100)/$FlipCount));
-   echo "Percentage of TT : " $TTPercent;
+	echo "Calculating Percentage of HTT --";
+    HTTPercent=$((($HTT*100)/$FlipCount));
+    echo "Percentage of HTT : " $HTTPercent;
+
+    echo "Calculating Percentage of THH --";
+	THHPercent=$((($THH*100)/$FlipCount));
+	echo "Percentage of THH : " $THHPercent;
+
+	echo "Calculating Percentage of THT --";
+    THTPercent=$((($THT*100)/$FlipCount));
+    echo "Percentage of THT : " $THTPercent;
+
+	echo "Calculating Percentage of TTH --";
+    TTHPercent=$((($TTH*100)/$FlipCount));
+    echo "Percentage of TTH : " $TTHPercent;
+
+	echo "Calculating Percentage of TTT --";
+    TTTPercent=$((($TTT*100)/$FlipCount));
+    echo "Percentage of TTT : " $TTTPercent;
 
 }
 
