@@ -2,15 +2,6 @@
 
 declare -A coinDict;
 
-HHH=0;
-HHT=0;
-HTH=0;
-HTT=0;
-THH=0;
-THT=0;
-TTH=0;
-TTT=0;
-
 headTailGenerator () {
 local counter=0;
 local DictCounter=0;
@@ -20,9 +11,19 @@ randomNum=$((RANDOM%2));
 
 if [ $randomNum -eq 1 ]
 then
+	coinDict[$DictCounter]="$randomNum";
+   echo "It's Heads";
+	(( counter++ ));
+   (( DictCounter ++ ));
+
 	randomNum1=$((RANDOM%2));
 	if [ $randomNum1 -eq 1 ]
 	then
+		coinDict[$DictCounter]="$randomNum$randomNum1";
+      echo "It's HH";
+		(( counter++ ));
+      (( DictCounter ++ ));
+
 		randomNum2=$((RANDOM%2));
 		if [ $randomNum2 -eq 1 ]
 		then
@@ -37,6 +38,11 @@ then
       		(( DictCounter ++ ));
 		fi
 	else
+		coinDict[$DictCounter]="$randomNum$randomNum1";
+      echo "It's HT";
+		(( counter++ ));
+      (( DictCounter ++ ));
+
 		randomNum2=$((RANDOM%2));
 		if [ $randomNum2 -eq 1 ]
 		then
@@ -46,15 +52,25 @@ then
 			(( DictCounter ++ ));
 		else
 			coinDict[$DictCounter]="$randomNum$randomNum1$randomNum2";
-      		echo "It's HTT";
-      		(( counter++ ));
-      		(( DictCounter ++ ));
+      	echo "It's HTT";
+      	(( counter++ ));
+      	(( DictCounter ++ ));
 		fi
 	fi
 else
+	coinDict[$DictCounter]="$randomNum";
+   echo "It's Tails";
+	(( counter++ ));
+   (( DictCounter ++ ));
+
 	randomNum1=$((RANDOM%2));
 	if [ $randomNum1 -eq 1 ]
 	then
+		coinDict[$DictCounter]="$randomNum$randomNum1";
+      echo "It's TH";
+		(( counter++ ));
+      (( DictCounter ++ ));
+
 		randomNum2=$((RANDOM%2));
 		if [ $randomNum2 -eq 1 ]
 		then
@@ -69,6 +85,11 @@ else
       		(( DictCounter ++ ));
 		fi
 	else
+		coinDict[$DictCounter]="$randomNum$randomNum1";
+      echo "It's TT";
+		(( counter++ ));
+      (( DictCounter ++ ));
+
 		randomNum2=$((RANDOM%2));
 		if [ $randomNum2 -eq 1 ]
 		then
@@ -87,80 +108,63 @@ fi
 done
 }
 
-calculatePercantage () {
+storingArray () {
+	for (( i=0; i<$FlipCount; i++ ))
+	do
+	temp=${coinDict[$i]};
+	coinArray[i]=$temp
+	done
+	echo ${coinArray[*]};
+}
+
+sorting () {
+	for (( j=0; j<$FlipCount; j++ ))
+	do
+		for (( k=$j+1; k<$FlipCount; k++ ))
+		do
+			if [ ${coinArray[j]} -gt ${coinArray[k]} ]
+			then
+				temp=${coinArray[j]};
+				coinArray[j]=${coinArray[k]};
+				coinArray[k]=$temp;
+			fi
+		done
+	done
+}
+
+winningComb () {
 	local counter=0;
+	local winCounter=0;
 
 	while [ $counter -lt $FlipCount ]
 	do
 		if [ ${coinDict[$counter]} == "111" ]
 		then
-			(( HHH++ ));
-		elif [ ${coinDict[$counter]} == "110" ]
+			winArray[winCounter]=${coinDict[$counter]};
+			(( winCounter++ ));
+		elif [ ${coinDict[$counter]} == "11" ]
 		then
-			(( HHT++ ));
-		elif [ ${coinDict[$counter]} == "101" ]
+			winArray[winCounter]=${coinDict[$counter]};
+			(( winCounter++ ));
+		elif [ ${coinDict[$counter]} == "1" ]
 		then
-			(( HTH++ ));
-		elif [ ${coinDict[$counter]} == "100" ]
-		then
-			(( HTT++ ));
-		elif [ ${coinDict[$counter]} == "011" ]
-		then
-			(( THH++ ));
-		elif [ ${coinDict[$counter]} == "010" ]
-		then
-			(( THT++ ));
-		elif [ ${coinDict[$counter]} == "001" ]
-		then
-			(( TTH++ ));
-		elif [ ${coinDict[$counter]} == "000" ]
-		then
-			(( TTT++ ));
+			winArray[winCounter]=${coinDict[$counter]};
+			(( winCounter++ ));
 		fi
 		(( counter++ ));
 	done
 
-	echo "Showing all elements dictionary : "${coinDict[@]};
-
-	echo "Calculating Percentage of HHH --";
-	HHHPercent=$((($HHH*100)/$FlipCount));
-	echo "Percentage of HHH : " $HHHPercent;
-
-	echo "Calculating Percentage of HHT --";
-    HHTPercent=$((($HHT*100)/$FlipCount));
-    echo "Percentage of HHT : " $HHTPercent;
-
-	echo "Calculating Percentage of HTH --";
-    HTHPercent=$((($HTH*100)/$FlipCount));
-    echo "Percentage of HTH : " $HTHPercent;
-
-	echo "Calculating Percentage of HTT --";
-    HTTPercent=$((($HTT*100)/$FlipCount));
-    echo "Percentage of HTT : " $HTTPercent;
-
-    echo "Calculating Percentage of THH --";
-	THHPercent=$((($THH*100)/$FlipCount));
-	echo "Percentage of THH : " $THHPercent;
-
-	echo "Calculating Percentage of THT --";
-    THTPercent=$((($THT*100)/$FlipCount));
-    echo "Percentage of THT : " $THTPercent;
-
-	echo "Calculating Percentage of TTH --";
-    TTHPercent=$((($TTH*100)/$FlipCount));
-    echo "Percentage of TTH : " $TTHPercent;
-
-	echo "Calculating Percentage of TTT --";
-    TTTPercent=$((($TTT*100)/$FlipCount));
-    echo "Percentage of TTT : " $TTTPercent;
-
+	echo "Showing all winning Combinations : "${winArray[*]};
 }
 
 coinMain () {
 
 	read -p "Enter number of times you want to flip coin " FlipCount;
 	headTailGenerator $FlipCount;
-	calculatePercantage $FlipCount;
+	storingArray $FlipCount;
+	sorting $FlipCount;
+	echo "Sorted Combination in array "${coinArray[*]};
+	winningComb $FlipCount;
 
 }
 
